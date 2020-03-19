@@ -1,0 +1,53 @@
+Recommended Structure:
+
+docs/               # documentation
+scripts/
+  manage.py         # installed to PATH via setup.py
+project_name/       # project dir (the one which django-admin.py creates)
+  apps/             # project-specific applications
+    accounts/       # most frequent app, with custom user model
+    __init__.py
+    ...
+  settings/         # settings for different environments, see below
+    __init__.py
+    production.py
+    development.py
+    ...
+
+  __init__.py       # contains project version
+  urls.py
+  wsgi.py
+static/             # site-specific static files
+templates/          # site-specific templates
+tests/              # site-specific tests (mostly in-browser ones)
+tmp/                # excluded from git
+setup.py
+requirements.txt
+requirements_dev.txt
+pytest.ini
+
+
+Folder structure followed for the project is as follows:-
+
+docs/               # documentation
+manage.py         # installed to PATH via setup.py
+project_name/       # project dir (the one which django-admin.py creates)
+  apps/             # project-specific applications
+    accounts/       # most frequent app, with custom user model
+    __init__.py
+    ...
+  settings/         # settings for different environments, see below
+    __init__.py
+    production.py
+    development.py
+    ...
+
+  __init__.py       # contains project version
+  urls.py
+  wsgi.py
+static/             # site-specific static files
+templates/          # site-specific templates
+tests/              # site-specific tests (mostly in-browser ones)
+tmp/                # excluded from git
+requirements.txt
+requirements_dev.txt
