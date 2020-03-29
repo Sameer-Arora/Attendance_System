@@ -44,3 +44,34 @@ Everywhere to keep the api uniform using plural form for each of the resource.
 - Simlarily Others..
 
 
+## API calls from frontend
+1. Sign-in page
+    - PUT credentials (username, password)
+    - GET status (correct or incorrect)
+
+2. Display for Courses Studying
+    a. Obtain list of courses studying
+        - PUT username/rollnumber
+        - GET list[courses]
+    b. Attendance data for 1 course
+        - PUT username + course_id
+        - GET attendance data (days absent, days present, last 5 classes maybe)
+
+3. Display for Courses Teaching (Instructors and TA)
+    a. Obtain list of courses teaching
+        - PUT username
+        - GET list[coursesTeaching]
+    b. Attendance data for the class
+        - PUT username + course_id
+        - GET attendance data
+    c. Report for a class
+        - PUT username + course_id
+        - GET detailed report generated (table output maybe, can be downloaded as excel file)
+
+4. Notifications
+    a. List of last n notifications
+        - PUT username
+        - GET list[notifications] of size n
+    b. Send Notification/Requests*
+    c. Accept Request*
+    d. Reject Request*
