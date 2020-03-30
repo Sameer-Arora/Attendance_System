@@ -50,28 +50,28 @@ Everywhere to keep the api uniform using plural form for each of the resource.
     - GET status (correct or incorrect)
 
 2. Display for Courses Studying
-    a. Obtain list of courses studying
-        - PUT username/rollnumber
+    1. Obtain list of courses studying
+        - PUT username
         - GET list[courses]
-    b. Attendance data for 1 course
+    2. Attendance data for 1 course
         - PUT username + course_id
         - GET attendance data (days absent, days present, last 5 classes maybe)
 
 3. Display for Courses Teaching (Instructors and TA)
-    a. Obtain list of courses teaching
+    1. Obtain list of courses teaching
         - PUT username
         - GET list[coursesTeaching]
-    b. Attendance data for the class
+    2. Attendance data for the class
         - PUT username + course_id
         - GET attendance data
-    c. Report for a class
+    3. Report for a class
         - PUT username + course_id
         - GET detailed report generated (table output maybe, can be downloaded as excel file)
 
 4. Notifications
-    a. List of last n notifications
+    1. List of last n notifications
         - PUT username
-        - GET list[notifications] of size n
-    b. Send Notification/Requests*
-    c. Accept Request*
-    d. Reject Request*
+        - GET list[notifications] of size n feteched along with courses.
+    2. Send Notification/Requests*
+    3. Accept Request*
+    4. Reject Request*
