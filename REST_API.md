@@ -86,6 +86,7 @@ Everywhere to keep the api uniform using plural form for each of the resource.
     2. Send Notification/Requests*
     3. Accept Request*
     4. Reject Request*
+	5. Open Notification* (Opening notification when clicked)
 
 
 
