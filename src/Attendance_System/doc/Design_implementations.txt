@@ -51,3 +51,7 @@ tests/              # site-specific tests (mostly in-browser ones)
 tmp/                # excluded from git
 requirements.txt
 requirements_dev.txt
+
+
+## Usinf Serializer instead of Django Formns
+Using Forms and ModelForms is fine for flat data, but it breaks do as soon as your trying to describe and deal with relationships.  If you look at version 2, you'll see a large part of the serializer fields documentation is taken up with describing various relational fields that you might want to use, and ways of dealing with both flat and nested relationships etc...
