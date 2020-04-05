@@ -1,25 +1,45 @@
 import 'package:flutter/material.dart';
 
-class FacultyHomePage extends StatefulWidget {
-  @override
-  _FacultyHomePageState createState() => _FacultyHomePageState();
+class LeaveApplication {
+  String subject;
+  String body;
+  String course;
+
 }
 
-class _FacultyHomePageState extends State<FacultyHomePage> {
+class StudNotificationPage extends StatefulWidget {
+  @override
+  _StudNotificationPageState createState() => _StudNotificationPageState();
+}
+
+class _StudNotificationPageState extends State<StudNotificationPage> {
 
   // index for currently selected icon from bottom navigation bar
   // 0 for Home
   // 1 for Reports
   // 2 for Notifications
-  // 3 for Open Camera
-  int currentNavBarIndex = 0;
+  // 3 for Leave Request
+  int currentNavBarIndex = 2;
+
+  // Temporary Course List
+  List <String> courseList = [
+    'CS201 : Data Structures',
+    'CS301 : Alogrithms',
+    'CS302 : Operating Systems',
+    'CS303 : Data Base Managment',
+    'CS304 : Computer Networks',
+    'CS305 : Software Engineering',
+    'CS306 : Computation Theory',
+    'CS503 : Machine Learning',
+  ];
 
   //List for storing Bottom Navigation Bar Routes
-  List<String> facultyNavBarRoutes = [
-    '/facultyHome',
-    '/facultyReportList',
-    '/facultyNotification',
-    '/facultyOpenCamera',
+
+  List<String> studNavBarRoutes = [
+    '/studentHome',
+    '/studentReportList',
+    '/studentNotification',
+    '/studentLeaveRequest',
   ];
 
   // Bottom Navigation Bar Items
@@ -27,16 +47,15 @@ class _FacultyHomePageState extends State<FacultyHomePage> {
     BottomNavigationBarItem(icon: Icon(Icons.home), title: Text('Home')),
     BottomNavigationBarItem(icon: Icon(Icons.insert_chart), title: Text('Reports')),
     BottomNavigationBarItem(icon: Icon(Icons.notifications), title: Text('Notification')),
-    BottomNavigationBarItem(icon: Icon(Icons.camera_alt), title: Text('Photo')),
+    BottomNavigationBarItem(icon: Icon(Icons.mail), title: Text('Leave')),
   ];
 
   // Function to be called on clicking bottom navigation bar item
   void _onItemTapped(int index) {
     setState(() {
-      Navigator.pushReplacementNamed(context, facultyNavBarRoutes[index]);
+      Navigator.pushReplacementNamed(context, studNavBarRoutes[index]);
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -50,9 +69,10 @@ class _FacultyHomePageState extends State<FacultyHomePage> {
       unselectedItemColor: Colors.black,
     );
 
-    Widget homeWidget = Container(
+
+    Widget notificationWidget = Container(
         child: Center(
-          child: Text('HOME', style: TextStyle(fontSize: 32),),
+          child: Text('NOTIFICATION', style: TextStyle(fontSize: 32),),
         )
     );
 
@@ -61,7 +81,7 @@ class _FacultyHomePageState extends State<FacultyHomePage> {
         title: Text('Student'),
         backgroundColor: Colors.amber,
       ),
-      body: homeWidget,
+      body: notificationWidget,
       bottomNavigationBar: bottomNavigationBar,
     );
   }

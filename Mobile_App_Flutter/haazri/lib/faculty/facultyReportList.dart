@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 
-class FacultyHomePage extends StatefulWidget {
+class FacultyReportListPage extends StatefulWidget {
   @override
-  _FacultyHomePageState createState() => _FacultyHomePageState();
+  _FacultyReportListPageState createState() => _FacultyReportListPageState();
 }
 
-class _FacultyHomePageState extends State<FacultyHomePage> {
+class _FacultyReportListPageState extends State<FacultyReportListPage> {
 
   // index for currently selected icon from bottom navigation bar
   // 0 for Home
   // 1 for Reports
   // 2 for Notifications
   // 3 for Open Camera
-  int currentNavBarIndex = 0;
+  int currentNavBarIndex = 1;
 
   //List for storing Bottom Navigation Bar Routes
   List<String> facultyNavBarRoutes = [
@@ -20,6 +20,17 @@ class _FacultyHomePageState extends State<FacultyHomePage> {
     '/facultyReportList',
     '/facultyNotification',
     '/facultyOpenCamera',
+  ];
+
+  List <String> courseList = [
+    'CS201 : Data Structures',
+    'CS301 : Alogrithms',
+    'CS302 : Operating Systems',
+    'CS303 : Data Base Managment',
+    'CS304 : Computer Networks',
+    'CS305 : Software Engineering',
+    'CS306 : Computation Theory',
+    'CS503 : Machine Learning',
   ];
 
   // Bottom Navigation Bar Items
@@ -37,7 +48,6 @@ class _FacultyHomePageState extends State<FacultyHomePage> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
 
@@ -50,10 +60,25 @@ class _FacultyHomePageState extends State<FacultyHomePage> {
       unselectedItemColor: Colors.black,
     );
 
-    Widget homeWidget = Container(
-        child: Center(
-          child: Text('HOME', style: TextStyle(fontSize: 32),),
-        )
+    Widget reportsWidget = Container(
+      child: ListView.builder(
+        itemCount: courseList.length,
+        itemBuilder: (context, index){
+          return Card(
+            child: ListTile(
+              trailing: Icon(Icons.keyboard_arrow_right),
+              title: Text(courseList[index]),
+              leading: Icon(Icons.library_books),
+              onTap: (){ },
+              onLongPress: (){
+                setState(() {
+                  Navigator.pushReplacementNamed(context, facultyNavBarRoutes.last, arguments: {'course':courseList[index]});
+                });
+              },
+            ),
+          );
+        },
+      ),
     );
 
     return Scaffold(
@@ -61,7 +86,7 @@ class _FacultyHomePageState extends State<FacultyHomePage> {
         title: Text('Student'),
         backgroundColor: Colors.amber,
       ),
-      body: homeWidget,
+      body: reportsWidget,
       bottomNavigationBar: bottomNavigationBar,
     );
   }

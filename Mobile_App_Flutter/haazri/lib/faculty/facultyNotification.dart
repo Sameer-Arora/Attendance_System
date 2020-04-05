@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 
-class FacultyHomePage extends StatefulWidget {
+class FacultyNotificationPage extends StatefulWidget {
   @override
-  _FacultyHomePageState createState() => _FacultyHomePageState();
+  _FacultyNotificationPageState createState() => _FacultyNotificationPageState();
 }
 
-class _FacultyHomePageState extends State<FacultyHomePage> {
+class _FacultyNotificationPageState extends State<FacultyNotificationPage> {
 
   // index for currently selected icon from bottom navigation bar
   // 0 for Home
   // 1 for Reports
   // 2 for Notifications
   // 3 for Open Camera
-  int currentNavBarIndex = 0;
+  int currentNavBarIndex = 2;
 
   //List for storing Bottom Navigation Bar Routes
   List<String> facultyNavBarRoutes = [
@@ -37,7 +37,6 @@ class _FacultyHomePageState extends State<FacultyHomePage> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
 
@@ -50,9 +49,9 @@ class _FacultyHomePageState extends State<FacultyHomePage> {
       unselectedItemColor: Colors.black,
     );
 
-    Widget homeWidget = Container(
+    Widget notificationWidget = Container(
         child: Center(
-          child: Text('HOME', style: TextStyle(fontSize: 32),),
+          child: Text('NOTIFICATION', style: TextStyle(fontSize: 32),),
         )
     );
 
@@ -61,7 +60,7 @@ class _FacultyHomePageState extends State<FacultyHomePage> {
         title: Text('Student'),
         backgroundColor: Colors.amber,
       ),
-      body: homeWidget,
+      body: notificationWidget,
       bottomNavigationBar: bottomNavigationBar,
     );
   }

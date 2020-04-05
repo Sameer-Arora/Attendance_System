@@ -42,9 +42,9 @@ class _UserTypePageState extends State<UserTypePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            getUserTypeBtn('Student', '/studentHomePage'),
+            getUserTypeBtn('Student', '/studentHome'),
             SizedBox(height: 20,),
-            getUserTypeBtn('Faculty', '/facultyHomePage'),
+            getUserTypeBtn('Faculty', '/facultyHome'),
           ],
         ),
 
