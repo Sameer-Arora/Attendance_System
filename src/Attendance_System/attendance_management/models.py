@@ -1,6 +1,6 @@
-from __future__ import unicode_literals
-from django.db import models
-from importlib import import_module
+# from __future__ import unicode_literals
+# from django.db import models
+# from importlib import import_module
 
 # Create your models here.
 class Courses(models.Model):
