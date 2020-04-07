@@ -1,4 +1,6 @@
+pipenv
 psycopg2 
 python-decouple
 dj-database-url
 djangorestframework
+coverage

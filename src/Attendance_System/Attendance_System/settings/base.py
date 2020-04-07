@@ -57,6 +57,8 @@ INSTALLED_APPS = [
     'attendance_management',
     'leaves_management',
     'reschedule_management',
+    'rest_framework',
+    'corsheaders',           ## package to avoid CORS errors.
 ]
 
 MIDDLEWARE = [
@@ -67,6 +69,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    ## Custom MiddleWare
+    'corsheaders.middleware.CorsMiddleware',         
 ]
 
 ROOT_URLCONF = 'Attendance_System.urls'
@@ -162,3 +166,8 @@ STATIC_URL = '/static/'
 
 
 # CACHES = {'default': env.cache('REDIS_CACHE_URL')}
+
+# we whitelist localhost:3000 because that's where frontend will be served
+# CORS_ORIGIN_WHITELIST = (
+#         'localhost:3000/'
+#     )
