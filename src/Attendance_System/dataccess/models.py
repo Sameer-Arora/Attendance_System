@@ -66,7 +66,7 @@ class Students(models.Model):
 	department = models.CharField(max_length=30)
 	year = models.CharField(max_length=10)
 	degree = models.CharField(max_length=30)
-	contact = models.CharField(unique=True, max_length=20)
+	contact = models.CharField(unique=True, max_length=100)
 	emailId = models.CharField( max_length=100)
 	def __str__(self):
 		return self.entryNo
