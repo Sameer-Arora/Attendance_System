@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 # import environ
 # coding: utf-8
+
 import os
 from decouple import config
 from pathlib import Path
@@ -167,7 +168,10 @@ STATIC_URL = '/static/'
 
 # CACHES = {'default': env.cache('REDIS_CACHE_URL')}
 
+## TO configure the Default Djangi User Class
+# AUTH_USER_MODEL = 'dataccess.Profile'
+
 # we whitelist localhost:3000 because that's where frontend will be served
 # CORS_ORIGIN_WHITELIST = (
 #         'localhost:3000/'
-#     )
+    # )

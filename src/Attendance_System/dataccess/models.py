@@ -13,6 +13,8 @@ from __future__ import unicode_literals
 from django.db import models
 from django.contrib.auth.models import User
 from importlib import import_module
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 # Create your models here.
 class Courses(models.Model):
@@ -32,7 +34,7 @@ class CourseSlots(models.Model):
 	course_slot_id = models.AutoField(primary_key=True)
 	timing_list = models.ManyToManyField(Timings)
 	def __str__(self):
-		return self.course_slot_id		
+		return self.course_slot_id
 
 # class Users(models.Model):
 # 	userId = models.AutoField(primary_key=True)
@@ -42,10 +44,33 @@ class CourseSlots(models.Model):
 # 	def __str__(self):
 # 		return self.userId
 
+class UserManager(models.Manager):
+
+	def create(self,userType,username,password,**kwargs  ):
+		print(**kwargs)
+		user = User(username=username,password=password, **kwargs)
+		user.save()
+		profile = Profile(
+			user=user,
+			userType=userType,
+		)
+		profile.save()
+		return user
+
 class Profile(models.Model):
 	user = models.OneToOneField(User, on_delete=models.CASCADE)
 	userType = models.CharField(max_length=30)
-	
+	objects = UserManager()
+
+	def __str__(self): 
+		return self.user.username
+
+# @receiver(post_save, sender=User)
+# def create_or_update_user_profile(sender, instance, created, **kwargs):
+# 	if created:
+# 		Profile.objects.create(user=instance)
+# 	instance.profile.save()
+
 class Faculties(models.Model):
 	facId = models.AutoField(primary_key=True)
 	userId = models.OneToOneField(User, models.CASCADE,db_index=False)
@@ -53,8 +78,8 @@ class Faculties(models.Model):
 	lastName = models.CharField(max_length=30)
 	department = models.CharField(max_length=30)
 	designation = models.CharField(max_length=30)
-	contact = models.BigIntegerField(unique=True)
-	emailId = models.CharField(unique=True, max_length=100)
+	contact = models.CharField(unique=True, max_length=100)
+	emailId = models.CharField( max_length=100)
 	def __str__(self):
 		return self.facId
 
@@ -66,10 +91,20 @@ class Students(models.Model):
 	department = models.CharField(max_length=30)
 	year = models.CharField(max_length=10)
 	degree = models.CharField(max_length=30)
-	contact = models.BigIntegerField(unique=True)
-	emailId = models.CharField(unique=True, max_length=100)
+	contact = models.CharField(unique=True, max_length=20)
+	emailId = models.CharField( max_length=100)
 	def __str__(self):
 		return self.entryNo
+
+class TeachingAssistant(models.Model):
+	userId = models.OneToOneField(User, models.CASCADE, blank=True, null=True)
+	course_offered = models.ForeignKey('Courses', on_delete=models.CASCADE, blank=True, null=True) 
+	contact = models.CharField(max_length=15, unique=True)
+	emailId = models.CharField( max_length=100)
+	entryNo = models.CharField(max_length=10, unique=True)
+	firstName = models.CharField(max_length=30)
+	lastName = models.CharField(max_length=30)
+	department = models.CharField(max_length=30)
 
 class CourseOffered(models.Model):
 	course_offered_id = models.AutoField(primary_key=True)
@@ -77,14 +112,17 @@ class CourseOffered(models.Model):
 	courseId = models.ForeignKey('Courses', on_delete=models.CASCADE, blank=True, null=True)
 	course_year = models.CharField(max_length=4)
 	course_sem = models.BooleanField()
-	course_slot = models.ForeignKey('Timings', models.CASCADE, related_name='+')	
+	course_slot = models.ForeignKey('CourseSlots', models.CASCADE, related_name='+')	
 
-class StudentCourseReg:
+class StudentCourseReg(models.Model):
+	course_reg_id = models.AutoField(primary_key=True)
 	course_offered = models.ForeignKey('CourseOffered', models.CASCADE, blank=True, null=True)
 	studentId = models.ForeignKey('Students', models.CASCADE, blank=True, null=True)
 
 
-class AttendanceRecord:
+
+
+class AttendanceRecord(models.Model):
 
 	class Meta(object):
 		unique_together = (("date", "studentReg"), )

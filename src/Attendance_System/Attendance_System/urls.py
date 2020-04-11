@@ -19,9 +19,10 @@ from rest_framework import routers                    # add this
 from dataccess import views                            # add this
 
 router = routers.DefaultRouter()                      # add this
-router.register(r'todos', views.TodoView, 'todo')     # add this
+router.register(r'user', views.UserView, 'user')     # add this
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')),
+    path('', include(router.urls)),
 ]

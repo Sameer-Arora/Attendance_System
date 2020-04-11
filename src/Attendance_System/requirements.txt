@@ -4,3 +4,4 @@ python-decouple
 dj-database-url
 djangorestframework
 coverage
+Faker

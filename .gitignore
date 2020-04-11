@@ -133,4 +133,11 @@ dmypy.json
 
 */migrations/*
 */Pipfile
+
+#vscode
+.vscode
+
+#populate env
+pyvenv.cfg
 Pipfile
+sample.py

@@ -3,9 +3,9 @@
 
 from django.shortcuts import render
 from rest_framework import viewsets          # add this
-from .serializers import TodoSerializer      # add this
-from .models import Profile                     # add this
+from .serializers import UserSerializer      # add this
+from django.contrib.auth.models import User
 
-class TodoView(viewsets.ModelViewSet):       # add this
-    serializer_class = TodoSerializer          # add this
-    queryset = Profile.objects.all()              # add this
+class UserView(viewsets.ModelViewSet):       # add this
+    serializer_class = UserSerializer          # add this
+    queryset = User.objects.all()              # add this
