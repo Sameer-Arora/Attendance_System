@@ -39,6 +39,14 @@ deg = ['btech', 'mtech', 'phd']
 
 year = ['2017', '2018', '2019', '2020']
 facID=[]
+datex=[]
+
+def genDates():
+    d = fakegen.date_this_year()
+    while d in datex:
+        d = fakegen.date_this_year()
+    datex.append(d)
+    return d
 
 def genCID(): #course code
     cid = fakegen.pystr(max_chars=5)
@@ -111,6 +119,24 @@ def add_Course_Slots():
     cs.save()
     return cs
 
+def add_Course_Slots(t1, t2, t3): #parametrized
+    # t1 = add_timings()
+    # t2 = add_timings()
+    # t3 = add_timings()
+    cs, created = CourseSlots.objects.get_or_create()
+    ts=[]
+    ts.append(t1)
+    ts.append(t2)
+    ts.append(t3)
+    cs.timing_list.set(ts)
+    # cs.timing_list.set(t2)
+    # cs.timing_list.set(t3)
+    # cs.timing_list.add(t2)
+    # cs.timing_list.add(t3)
+    cs.save()
+    return cs
+
+
 def users(xyz):
     pwd = 'software'
     try:
@@ -168,6 +194,18 @@ def coff():
     coff.save()
     return coff
 
+def coffFacSlot(fcid, cid, cslot): #parameterized function for course offered
+    # fcid = fac()
+    # cid = add_courses()
+    # cslot = add_Course_Slots()
+    coff, created = CourseOffered.objects.get_or_create(facId=fcid, courseId=cid, 
+                                                course_year=fakegen.year, 
+                                                course_sem=fakegen.boolean(chance_of_getting_true=50),
+                                                course_slot=cslot)
+    coff.save()
+    return coff
+
+
 def studentRegistersInCourse():
     student = stu()
     courseOffered = coff()
@@ -175,12 +213,70 @@ def studentRegistersInCourse():
     src.save()
     return src
 
-def attendanceRec():
+def studentRegistersInCourse(student, courseOffered): #parameterized 
+    # student = stu()
+    # courseOffered = coff()
+    src, created = StudentCourseReg.objects.get_or_create(course_offered=courseOffered, studentId=student)
+    src.save()
+    return src
+
+
+def attendanceRec(): # considers attendance of today only
     stuRegistration = studentRegistersInCourse()
     ar, created = AttendanceRecord.objects.get_or_create(date=datetime.today(), studentReg=stuRegistration,
                                                         value=fakegen.boolean(chance_of_getting_true=75))
     ar.save()
     return ar
+
+def attendanceRec(datewa, stuRegistration):
+    # stuRegistration = studentRegistersInCourse()
+    ar, created = AttendanceRecord.objects.get_or_create(date=datewa, studentReg=stuRegistration,
+                                                        value=fakegen.boolean(chance_of_getting_true=75))
+    ar.save()
+    return ar
+
+
+def class1():
+    s1 = stu()
+    s2 = stu()
+    s3 = stu()
+    s4 = stu()
+    f1 = fac()
+    f2 = fac()
+    course = add_courses()
+    t1 = add_timings()
+    t2 = add_timings()
+    t3 = add_timings()
+    t4 = add_timings()
+    cslot1 = add_Course_Slots(t1, t2, t3)
+    cslot2 = add_Course_Slots(t2, t3, t4)
+    coff1 = coffFacSlot(f1, course, cslot1)
+    coff2 = coffFacSlot(f2, course, cslot2)
+    sr1 = studentRegistersInCourse(s1, coff1)#student1 registration coff1
+    sr2 = studentRegistersInCourse(s2, coff1)#student2 registration coff1
+    sr3 = studentRegistersInCourse(s3, coff2)#student3 registration coff2
+    sr4 = studentRegistersInCourse(s4, coff2)#student4 registration coff2 
+    dates=[]
+    x=0
+    while x<5:
+        x = x+1
+        d=genDates()
+        dates.append(d)
+    ar1=[] #attendance record of student registration 1
+    ar2=[]
+    ar3=[]
+    ar4=[]
+    for i in dates:
+        a1 = attendanceRec(i, sr1)
+        a2 = attendanceRec(i, sr2) 
+        a3 = attendanceRec(i, sr3)
+        a4 = attendanceRec(i, sr4)
+        ar1.append(a1)
+        ar2.append(a2)
+        ar3.append(a3)
+        ar4.append(a4)
+
+    return
 
 if __name__ == "__main__":
     print("Starting populating")
