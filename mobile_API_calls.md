@@ -15,9 +15,9 @@
               
  ### Report
 
- **Curse List**
+ **Course List**
  
-    Note: If userType is student, return all course he is enrolled in, if usertype is faculty, return all the courses he teach
+    Note: If userType is student, return all course he is enrolled in, if usertype is faculty, return all the courses he teaches
     
     Sent: userID, userType
     Received: 
@@ -71,7 +71,8 @@
                 MinAttendaceRequirement : 75%,
               }
               
-    **Faculty Course Attendance Details**
+  **Faculty Course Attendance Details**
+  
     Sent: userID, userType, courseID
     Received: 
               { 
