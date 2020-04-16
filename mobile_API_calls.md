@@ -1,8 +1,9 @@
 ## Mobile App API Calls
 
-###Sign In
+### Sign In
 
- **Login credential verification:**
+**Login credential verification:**
+ 
     Sent: Username, Password  
     Received: 
               { 
@@ -12,9 +13,10 @@
                 Name   : "Harshit Malik" or "" // if status is invalid return empty string
               }
               
- ###Report
+ ### Report
 
  **Curse List**
+ 
     Note: If userType is student, return all course he is enrolled in, if usertype is faculty, return all the courses he teach
     
     Sent: userID, userType
@@ -40,6 +42,7 @@
               }
          
   **Course Details**
+  
     Sent: courseID
     Received: 
               { 
@@ -55,6 +58,7 @@
               }
               
  **Student Course Attendance Details**
+ 
     Sent: userID, userType, courseID
     Received: 
               { 
