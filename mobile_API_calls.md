@@ -2,6 +2,9 @@
 
 ### Sign In
 
+I can replace the status with standard HTTP_codes in response.
+I can return the respecive hyperlinks to explore acccordning to user type in generating the course list.In REST API design you give the next set of possible URL'S in an hierarchial fashion. 
+
 **Login credential verification:**
  
     Sent: Username, Password  
@@ -19,10 +22,10 @@
  
     Note: If userType is student, return all course he is enrolled in, if usertype is faculty, return all the courses he teaches
     
-    Sent: userID, userType
+    Sent: 
     Received: 
               { 
-                TotalCourse   : 6,
+                TotalCourse   : 6,   // Don't add such entites which can be easily inferred  
                 CourseList   : [
                                 {
                                   courseID : 12331,
@@ -43,7 +46,7 @@
          
   **Course Details**
   
-    Sent: courseID
+    Sent: 
     Received: 
               { 
               ` courseID : 12331,
@@ -59,7 +62,7 @@
               
  **Student Course Attendance Details**
  
-    Sent: userID, userType, courseID
+    Sent: 
     Received: 
               { 
               ` Instructor : "Dr. Gunturi",
@@ -73,7 +76,7 @@
               
   **Faculty Course Attendance Details**
   
-    Sent: userID, userType, courseID
+    Sent: 
     Received: 
               { 
               ` Instructor : "Dr. Gunturi",
