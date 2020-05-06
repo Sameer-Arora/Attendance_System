@@ -59,6 +59,8 @@ INSTALLED_APPS = [
     'leaves_management',
     'reschedule_management',
     'rest_framework',
+    'rest_framework.authtoken',
+    'rest_auth',
     'corsheaders',           ## package to avoid CORS errors.
 ]
 
@@ -168,9 +170,12 @@ STATIC_URL = '/static/'
 
 # CACHES = {'default': env.cache('REDIS_CACHE_URL')}
 
-## TO configure the Default Djangi User Class
-# AUTH_USER_MODEL = 'dataccess.Profile'
-
+REST_FRAMEWORK = {
+    'DEFAULT_PARSER_CLASSES': (
+        'rest_framework.parsers.JSONParser',
+        'rest_framework.parsers.FormParser',
+    )
+}
 # we whitelist localhost:3000 because that's where frontend will be served
 # CORS_ORIGIN_WHITELIST = (
 #         'localhost:3000/'

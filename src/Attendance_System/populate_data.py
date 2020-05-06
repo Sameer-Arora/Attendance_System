@@ -97,7 +97,8 @@ def add_timings():
     # print (tinit)
     tend = fakegen.time()
     # print("tend")
-    # print(tend)
+    # print(tend)ingAmount.objects.create(pizza=super_pep, topping=pepperoni, amount=ToppingAmount.DOUBLE)
+
     t, created = Timings.objects.get_or_create(day=random.choice(days), start_time=tinit, end_time=tend)
     t.save()
     return t
@@ -137,34 +138,27 @@ def add_Course_Slots(t1, t2, t3): #parametrized
     return cs
 
 
-def users(xyz):
-    pwd = 'software'
+def users(xyz,pwd):
     try:
-        print("fsa")
-        u = Profile.objects.create(xyz,random.choice(usernameA),pwd)
-        # u.save()
+        # print("fsa")
+        u = User.objects.create_user(username=fakegen.name(),password=pwd)
+        u.save()
+        p = Profile.objects.create(xyz,u)
         return u
     except Exception as e:
         print('Error: Invalid argument: {}'.format(e))
+        return None
 
 def fac():
     xyz = 'faculty'
     pwd = 'software'
-    u = User.objects.create_user(username=fakegen.name(), password=pwd)
-    # try:
-    #     u = User.objects.create_user(username=random.choice(usernameA), password=pwd)
-    #     u.userType=xyz
-    #     u.save()
-    #     # return u
-    # except:
-    #     pass
-
+    u = users(xyz,pwd)
     fid = genFID()
     # print("u")
     # print(u)
     # print("fid")
     # print(fid)
-    f, created = Faculties.objects.get_or_create( userId=u, firstName=random.choice(firstN), 
+    f, created = Faculties.objects.get_or_create( user=u, firstName=random.choice(firstN), 
                                 lastName=random.choice(lastN), department=random.choice(deps), 
                                 designation=random.choice(desigs), contact=genContact(), 
                                 emailId=fakegen.email())
@@ -174,12 +168,12 @@ def fac():
 def stu():
     xyz = 'student'
     pwd = 'software'
-    u = User.objects.create_user(username=fakegen.name(), password=pwd)
-    s, created = Students.objects.get_or_create(userId=u, entryNo=fakegen.pystr(max_chars=10), 
+    u = users(xyz,pwd)
+    s, created = Students.objects.get_or_create(user=u, entryNo=fakegen.pystr(max_chars=10), 
                                 firstName=random.choice(firstN), lastName=random.choice(lastN), 
                                 department=random.choice(deps), year=random.choice(yr), 
                                 degree=random.choice(deg), contact=genContact(), 
-                                emailId=fakegen.email())
+                                emailId=fakegen.pystr(max_chars=10))
     s.save()
     return s
 
@@ -277,12 +271,41 @@ def class1():
         ar4.append(a4)
 
     return
+import shlex
+import subprocess
 
+def system_call(command,stdin=None):
+    print(stdin)
+    inp=shlex.split(command)
+    process = subprocess.run(inp, 
+                            stdout=subprocess.PIPE, 
+                            universal_newlines=True,
+                            input=stdin)
+    return process
+
+def clear_database():
+    process = system_call(" psql -d sameer -c \"DROP DATABASE test\" ")
+    print(process)
+    process = system_call(" psql -c  \"CREATE DATABASE test;\" ")
+    print(process)
+    process = system_call(" python manage.py makemigrations ")
+    print(process)
+    process = system_call(" python manage.py migrate ")
+    print(process)
+    process = system_call("echo \"from django.contrib.auth.models import User; User.objects.create_superuser('qw', 'admin@example.com', '12')\"")
+    print(process)
+    process = system_call("python manage.py shell",stdin=process.stdout)  
+    print(process)
+     
+clear_database()     
 if __name__ == "__main__":
+    clear_database()
     print("Starting populating")
-    x=users('student')
+    # x=users('student')
     # f = fac()
     # c = coff()
     # src=studentRegistersInCourse()
     # att = attendanceRec()
-    print("user Created")    
+    class1()
+    print("user Created")  
+

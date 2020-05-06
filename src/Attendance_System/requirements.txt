@@ -5,3 +5,5 @@ dj-database-url
 djangorestframework
 coverage
 Faker
+django-rest-auth
+

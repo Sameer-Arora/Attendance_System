@@ -18,12 +18,11 @@ from django.dispatch import receiver
 
 # Create your models here.
 class Courses(models.Model):
-	courseId = models.IntegerField(blank=True, null=True)
 	course_code = models.CharField(max_length=5, blank=False, null=False, default='xxxxx')
 	course_name = models.CharField(max_length=30, blank=True, null=True)
 	lab_included = models.BooleanField()
 	def __str__(self):
-		return self.courseId
+		return str(self.courseId)
 
 class Timings(models.Model):
 	day = models.CharField(max_length=9, default='Sunday')
@@ -31,25 +30,13 @@ class Timings(models.Model):
 	end_time = models.TimeField()
 
 class CourseSlots(models.Model):
-	course_slot_id = models.AutoField(primary_key=True)
 	timing_list = models.ManyToManyField(Timings)
 	def __str__(self):
-		return self.course_slot_id
+		return str(self.course_slot_id)
+class ProfileManager(models.Manager):
 
-# class Users(models.Model):
-# 	userId = models.AutoField(primary_key=True)
-# 	userName = models.CharField(max_length=30, unique=True)
-# 	password = models.CharField(max_length=30)
-# 	userType = models.CharField(max_length=30)
-# 	def __str__(self):
-# 		return self.userId
-
-class UserManager(models.Manager):
-
-	def create(self,userType,username,password,**kwargs  ):
-		print(**kwargs)
-		user = User(username=username,password=password, **kwargs)
-		user.save()
+	def create(self,userType,user,**kwargs):
+		# print("2",**kwargs)
 		profile = Profile(
 			user=user,
 			userType=userType,
@@ -60,31 +47,83 @@ class UserManager(models.Manager):
 class Profile(models.Model):
 	user = models.OneToOneField(User, on_delete=models.CASCADE)
 	userType = models.CharField(max_length=30)
-	objects = UserManager()
+	objects = ProfileManager()
 
 	def __str__(self): 
 		return self.user.username
 
+# Signals to do some operations after Database Updates JUST like SQL triggers.
 # @receiver(post_save, sender=User)
 # def create_or_update_user_profile(sender, instance, created, **kwargs):
 # 	if created:
 # 		Profile.objects.create(user=instance)
 # 	instance.profile.save()
 
+# class BaseManager(models.Manager):
+# 	def __init__(self,modelClass):
+# 		super(BaseManager, self).__init__()
+# 		self.userType=None
+# 		self.modelClass=modelClass
+
+# 	def create(self,**kwargs):
+# 		user=kwargs['user']
+# 		profile = Profile(
+# 			user=user,
+# 			# userType=userType,
+# 			userType=self.userType,
+# 		)
+# 		profile.save()
+# 		faculty = self.modelClass(**kwargs)
+# 		faculty.save()
+# 		return faculty
+
+class FacultiesManager(models.Manager):
+	def __init__(self):
+		super(FacultiesManager, self).__init__()
+		self.userType="Faculty"
+
+	def create(self,**kwargs):
+		user=kwargs['user']
+		profile = Profile(
+			user=user,
+			# userType=userType,
+			userType=self.userType,
+		)
+		profile.save()
+		faculty = Faculties(**kwargs)
+		faculty.save()
+		return faculty
+
+class StudentsManager(models.Manager):
+	def __init__(self):
+		super(StudentsManager, self).__init__()
+		self.userType="Student"
+	def create(self,**kwargs):
+		user=kwargs['user']
+		profile = Profile(
+			user=user,
+			# userType=userType,
+			userType=self.userType,
+		)
+		profile.save()
+		faculty = Students(**kwargs)
+		faculty.save()
+		return faculty
+
 class Faculties(models.Model):
-	facId = models.AutoField(primary_key=True)
-	userId = models.OneToOneField(User, models.CASCADE,db_index=False)
+	user = models.OneToOneField(User, models.CASCADE,db_index=False)
 	firstName = models.CharField(max_length=30)
 	lastName = models.CharField(max_length=30)
 	department = models.CharField(max_length=30)
 	designation = models.CharField(max_length=30)
 	contact = models.CharField(unique=True, max_length=100)
 	emailId = models.CharField( max_length=100)
+	objects = FacultiesManager()
 	def __str__(self):
-		return self.facId
+		return str(self.facId)
 
 class Students(models.Model):
-	userId = models.OneToOneField(User, models.CASCADE, blank=True, null=True)
+	user = models.OneToOneField(User, models.CASCADE, blank=True, null=True)
 	entryNo = models.CharField(max_length=10, unique=True)
 	firstName = models.CharField(max_length=30)
 	lastName = models.CharField(max_length=30)
@@ -93,11 +132,13 @@ class Students(models.Model):
 	degree = models.CharField(max_length=30)
 	contact = models.CharField(unique=True, max_length=100)
 	emailId = models.CharField( max_length=100)
+	courses = models.ManyToManyField('CourseOffered', through='StudentCourseReg', related_name='students')
 	def __str__(self):
 		return self.entryNo
 
+
 class TeachingAssistant(models.Model):
-	userId = models.OneToOneField(User, models.CASCADE, blank=True, null=True)
+	user = models.OneToOneField(User, models.CASCADE, blank=True, null=True)
 	course_offered = models.ForeignKey('Courses', on_delete=models.CASCADE, blank=True, null=True) 
 	contact = models.CharField(max_length=15, unique=True)
 	emailId = models.CharField( max_length=100)
@@ -107,7 +148,6 @@ class TeachingAssistant(models.Model):
 	department = models.CharField(max_length=30)
 
 class CourseOffered(models.Model):
-	course_offered_id = models.AutoField(primary_key=True)
 	facId = models.ForeignKey('Faculties', on_delete=models.CASCADE, blank=True, null=True)
 	courseId = models.ForeignKey('Courses', on_delete=models.CASCADE, blank=True, null=True)
 	course_year = models.CharField(max_length=4)
@@ -115,7 +155,6 @@ class CourseOffered(models.Model):
 	course_slot = models.ForeignKey('CourseSlots', models.CASCADE, related_name='+')	
 
 class StudentCourseReg(models.Model):
-	course_reg_id = models.AutoField(primary_key=True)
 	course_offered = models.ForeignKey('CourseOffered', models.CASCADE, blank=True, null=True)
 	studentId = models.ForeignKey('Students', models.CASCADE, blank=True, null=True)
 
@@ -130,3 +169,34 @@ class AttendanceRecord(models.Model):
 	date = models.DateField(db_index=True)
 	studentReg = models.ForeignKey('StudentCourseReg', models.CASCADE, blank=True, null=True)
 	value = models.BooleanField(default=True)
+
+# class Pizza(models.Model):
+
+# 	name = models.CharField(max_length=30)
+# 	toppings = models.ManyToManyField('Topping', through='ToppingAmount', related_name='pizzas')
+
+# 	def __str__(self):
+# 		return self.name
+
+
+# class Topping(models.Model):
+
+# 	name = models.CharField(max_length=30)
+
+# 	def __str__(self):
+# 		return self.name
+
+# class ToppingAmount(models.Model):
+
+# 	REGULAR = 1
+# 	DOUBLE = 2
+# 	TRIPLE = 3
+# 	AMOUNT_CHOICES = (
+# 		(REGULAR, 'Regular'),
+# 		(DOUBLE, 'Double'),
+# 		(TRIPLE, 'Triple'),
+# 	)
+
+# 	pizza = models.ForeignKey('Pizza', related_name='topping_amounts', on_delete=models.SET_NULL, null=True)
+# 	topping = models.ForeignKey('Topping', related_name='topping_amounts', on_delete=models.SET_NULL, null=True, blank=True)
+# 	amount = models.IntegerField(choices=AMOUNT_CHOICES, default=REGULAR)
