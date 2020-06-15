@@ -49,10 +49,22 @@ class ProfileSerializer(serializers.HyperlinkedModelSerializer):
 class CoursesSerializer(serializers.HyperlinkedModelSerializer):
 	class Meta:
 		model = Courses
-		fields = ('url','courseId', 'course_code', 'course_name', 'lab_included',)
+		fields = ('url','id', 'course_code', 'course_name', 'lab_included',)
 
+class TimingsSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = Timings
+		fields = '__all__'
+
+class CourseSlotsSerializer(serializers.HyperlinkedModelSerializer):
+	timing_list = TimingsSerializer()
+	class Meta:
+		model = CourseSlots
+		fields ='__all__'
+		
 class CourseOfferedSerializer(serializers.HyperlinkedModelSerializer):
 	courseId = CoursesSerializer()
+	course_slot = CourseSlotsSerializer()	
 	class Meta:
 		model = CourseOffered
 		fields ='__all__'
@@ -62,13 +74,8 @@ class CourseOfferedSerializer(serializers.HyperlinkedModelSerializer):
 	# courseId = models.ForeignKey('Courses', on_delete=models.CASCADE, blank=True, null=True)
 	# course_year = models.CharField(max_length=4)
 	# course_sem = models.BooleanField()
-	# course_slot = models.ForeignKey('CourseSlots', models.CASCADE, related_name='+')	
 
 	
-class TimingsSerializer(serializers.HyperlinkedModelSerializer):
-	class Meta:
-		model = Timings
-		fields = '__all__'
 		
 class FacultiesSerializer(serializers.HyperlinkedModelSerializer):
 	user = UserSerializer()
@@ -76,10 +83,10 @@ class FacultiesSerializer(serializers.HyperlinkedModelSerializer):
 	# courseoffered = CourseOfferedSerializer()
 	class Meta:
 		model = Faculties
-		fields = ('facId','user','firstName','lastName','department','designation','contact','emailId','courseoffered')
+		fields = ('url','user','firstName','lastName','department','designation','contact','emailId','courseoffered')
 	def get_courseoffered(self,obj):
 		result = '{}?{}'.format(
-			reverse('faculty-courseoffered', args=[obj.facId], request=self.context['request']),
+			reverse('faculty-courseoffered', args=[obj.id], request=self.context['request']),
 			'param=foo'
 		)
 		print(result)
@@ -96,6 +103,14 @@ class FacultiesSerializer(serializers.HyperlinkedModelSerializer):
 
 class StudentsSerializer(serializers.HyperlinkedModelSerializer):
 	user = UserSerializer()
+	courseoffered = serializers.SerializerMethodField()
+	def get_courseoffered(self,obj):
+		result = '{}?{}'.format(
+			reverse('student-coursesregistered', args=[obj.id], request=self.context['request']),
+			'param=foo'
+		)
+		print(result)
+		return result
 	class Meta:
 		model = Students
 		fields = '__all__'
@@ -130,15 +145,6 @@ class CoursesSerializer(serializers.HyperlinkedModelSerializer):
 		model = Courses
 		fields ='__all__'
 
-class TimingsSerializer(serializers.HyperlinkedModelSerializer):
-	class Meta:
-		model = Timings
-		fields ='__all__'
-
-class CourseSlotsSerializer(serializers.HyperlinkedModelSerializer):
-	class Meta:
-		model = CourseSlots
-		fields ='__all__'
 
 class StudentCourseRegSerializer(serializers.HyperlinkedModelSerializer):
 	class Meta:

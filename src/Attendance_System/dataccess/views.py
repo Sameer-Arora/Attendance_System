@@ -53,20 +53,20 @@ class LoginView(views.APIView):       # add this
 
 class StudentsCoursesView(views.APIView):
     def get(self,request,stuId,format=None):
-            print(request,stuId)
+            print("Student",request,stuId)
             data = request.data
             print(data)
-            student= Students.objects.get_or_create(id=stuId)
+            student= Students.objects.get(id=stuId)
             content = {'status':"Student Id Invalid", 'courses':[]}
             if student is not None:
                 coursetaken = student.courses.all()
                     # courseoffered = CourseOffered.objects.filter(facId=facId)
-                print(courseoffered)
-                if len(courseoffered) <= 0:
+                print(coursetaken)
+                if len(coursetaken) <= 0:
                     content['status']='Student takes no courses.'
                     return Response(content,status=status.HTTP_404_NOT_FOUND)
 
-                serializer = CourseOfferedSerializer(courseoffered,context={'request': request},many=True)
+                serializer = CourseOfferedSerializer(coursetaken,context={'request': request},many=True)
                 print(serializer.data)
                 content['courses']=serializer.data
                 content['status']='Valid'
@@ -79,7 +79,7 @@ class CoursesStudentsView(views.APIView):
             print(request,courseId)
             data = request.data
             print(data)
-            courseoffered = CourseOffered.objects.get_or_create(id=courseId)
+            courseoffered = CourseOffered.objects.get(id=courseId)
             courseoffered = {'status':"Courseoffered Id Invalid", 'students':[]}
             if courseoffered is not None:
                 coursetaken = courseoffered.students.all()
@@ -103,7 +103,7 @@ class FacultiesCoursesView(views.APIView):
         print(request,facId)
         data = request.data
         print(data)
-        faculty= Faculties.objects.get_or_create(id=facId)
+        faculty= Faculties.objects.get(id=facId)
         content = {'status':"Faculty Id Invalid", 'courses':[]}
         if faculty is not None:
             courseoffered = CourseOffered.objects.filter(facId_id=facId)

@@ -141,3 +141,4 @@ dmypy.json
 pyvenv.cfg
 Pipfile
 sample.py
+src/Attendance_System/attendance_management/migrations/0002_auto_20200331_1729.py

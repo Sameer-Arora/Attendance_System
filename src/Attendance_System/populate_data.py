@@ -86,7 +86,7 @@ def genFID():
 #     return un
 
 def add_courses():
-    c, created = Courses.objects.get_or_create(courseId=gencourseId(), course_code=genCID(), course_name=fakegen.word(), 
+    c, created = Courses.objects.get_or_create(id=gencourseId(), course_code=genCID(), course_name=fakegen.word(), 
                     lab_included=fakegen.boolean(chance_of_getting_true=50))
     c.save()
     return c 
